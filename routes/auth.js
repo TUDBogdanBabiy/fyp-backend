@@ -6,6 +6,7 @@ const { registerValidation, loginValidation } = require('../validation');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const axios = require('axios');
+const verifyToken = require('./verifyToken');
 
 
 router.post('/register', async (req, res) => {
@@ -32,7 +33,8 @@ router.post('/register', async (req, res) => {
 
     try {
         const savedUser = await user.save();
-        res.json({ user: user._id });
+        const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET);
+        res.json({ username: user.firstname, user_type: user.type, token: token });
     } catch (error) {
         res.status(400).send(error.message);
     }
@@ -40,6 +42,7 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     // Validate the data
+    console.log(req.body);
     const { error } = loginValidation(req.body);
     if (error) return res.status(400).send(error.details[0].message);
 
@@ -51,17 +54,9 @@ router.post('/login', async (req, res) => {
     if (!validPass) return res.status(400).send('Incorrect email or password!');
 
     const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET);
-    res.header('auth-token', token).json({ user: user.firstname, user_type: user.type });
+    res.json({ username: user.firstname, user_type: user.type, token: token });
 });
 
-router.post('/logout', async (req, res) => {
-    try {
-        const users = await User.find();
-        res.json(users);
-    } catch (error) {
-        res.json({ message: error })
-    }
-});
 
 router.post('/login/google', async (req, res) => {
     const google_id_token = req.header('id_token');
@@ -74,7 +69,7 @@ router.post('/login/google', async (req, res) => {
 
         if (user) {
             const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET);
-            return res.header('auth-token', token).json({ user: user.firstname, user_type: user.type });
+            return res.json({ username: user.firstname, user_type: user.type, token: token });
         } else {
             const user = new User({
                 firstname: given_name,
@@ -85,8 +80,8 @@ router.post('/login/google', async (req, res) => {
 
             const savedUser = await user.save();
 
-            const token = jwt.sign({ id: user._id, name: savedUser.firstname }, process.env.TOKEN_SECRET);
-            return res.header('auth-token', token).send(token);
+            const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET);
+            return res.json({ username: user.firstname, user_type: user.type, token: token });
         }
     } catch (error) {
         res.status(400).send(error.message);
@@ -94,20 +89,11 @@ router.post('/login/google', async (req, res) => {
 
 });
 
-router.post('/', async (req, res) => {
-
-    try {
-        const user = new User({
-            name: req.body.name
-        });
-
-        const savedUser = await user.save();
-        res.json(savedUser);
-
-    } catch (error) {
-        res.json({ message: error })
-    }
-    res.send('Showing all users');
+router.get('/user', verifyToken , async (req, res) => {
+    const user_id = req.user.id;
+    const user = await User.findOne({ _id: user_id });
+    const newToken = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET);
+    res.json({ username: user.firstname, user_type: user.type, token: newToken });
 });
 
 module.exports = router;
