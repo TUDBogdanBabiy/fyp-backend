@@ -5,7 +5,7 @@ const Attraction = require('../models/Attraction');
 const { attractionValidation } = require('../validation');
 const verifyToken = require('./verifyToken');
 
-router.get('/', async (req, res) => {
+router.get('/',verifyToken, async (req, res) => {
     try {
         const attractions = await Attraction.find();
         res.json(attractions);
@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
     }
 });
 
-router.delete('/delete/:attraction_id', async (req, res) => {
+router.delete('/delete/:attraction_id', verifyToken, async (req, res) => {
     const id = req.params.attraction_id;
     try {
         const attraction = await Attraction.findByIdAndDelete(id, {useFindAndModify: false});
@@ -28,7 +28,7 @@ router.delete('/delete/:attraction_id', async (req, res) => {
     }
 });
 
-router.patch('/update/:attraction_id', async (req, res) => {
+router.patch('/update/:attraction_id', verifyToken, async (req, res) => {
     const id = req.params.attraction_id;
     try {
         const attraction = await Attraction.findByIdAndUpdate(id, req.body);
@@ -42,7 +42,7 @@ router.patch('/update/:attraction_id', async (req, res) => {
     }
 });
 
-router.post('/add', async (req, res) => {
+router.post('/add', verifyToken, async (req, res) => {
     // Validate the data before creating a user
     const { error } = attractionValidation(req.body);
     if (error) return res.status(400).send(error.details[0].message);
