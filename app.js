@@ -7,8 +7,9 @@ const cors = require('cors');
 dotenv.config();
 
 // Import Routes
-const usersRoute = require('./routes/users');
-const authRoute = require('./routes/auth');
+const usersRoutes = require('./routes/users');
+const authRoutes = require('./routes/auth');
+const attractionsRoutes = require('./routes/attractions');
 
 // Middleware
 app.use(cors());
@@ -17,8 +18,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 
 // Routes 
-app.use('/users', usersRoute);
-app.use('/auth', authRoute);
+app.use('/users', usersRoutes);
+app.use('/auth', authRoutes);
+app.use('/attractions', attractionsRoutes);
 
 // Connect to DB
 mongoose.connect(process.env.DB_CONNECTION, { useUnifiedTopology: true, useNewUrlParser: true }, () => { console.log('Connected to DB!'); })
