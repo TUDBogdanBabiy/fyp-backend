@@ -49,7 +49,9 @@ router.delete("/delete/:user_id", verifyToken, async (req, res) => {
 router.patch("/update/:user_id", verifyToken, async (req, res) => {
   const id = req.params.user_id;
   try {
-    const user = await User.findByIdAndUpdate(id, req.body);
+    const user = await User.findByIdAndUpdate(id, req.body, {
+      useFindAndModify: false,
+    });
     if (user) {
       res.status(200).send("User Updated Successfully!");
     } else {
