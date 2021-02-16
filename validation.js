@@ -27,9 +27,19 @@ const attractionValidation = (data) => {
     opening_time: Joi.string().required(),
     closing_time: Joi.string().required(),
     max_customers: Joi.number().required().min(1),
-    min_age:Joi.number().required().min(1),
-    max_weight:Joi.number().required(),
-    min_height:Joi.number().required()
+    min_age: Joi.number().required().min(1),
+    max_weight: Joi.number().required(),
+    min_height: Joi.number().required(),
+    time_slots: Joi.array().required,
+  });
+  return schema.validate(data);
+};
+
+const bookingValidation = (data) => {
+  const schema = Joi.object({
+    customer_id: Joi.string().required(),
+    attraction_id: Joi.string().required(),
+    start_time: Joi.string().required(),
   });
   return schema.validate(data);
 };
@@ -37,3 +47,4 @@ const attractionValidation = (data) => {
 module.exports.registerValidation = registerValidation;
 module.exports.loginValidation = loginValidation;
 module.exports.attractionValidation = attractionValidation;
+module.exports.bookingValidation = bookingValidation;
