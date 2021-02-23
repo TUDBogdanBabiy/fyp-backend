@@ -23,14 +23,15 @@ const loginValidation = (data) => {
 const attractionValidation = (data) => {
   const schema = Joi.object({
     title: Joi.string().required().min(2).max(255),
+    description: Joi.string().required(),
     price: Joi.number().required(),
     opening_time: Joi.string().required(),
     closing_time: Joi.string().required(),
-    max_customers: Joi.number().required().min(1),
-    min_age: Joi.number().required().min(1),
-    max_weight: Joi.number().required(),
-    min_height: Joi.number().required(),
-    time_slots: Joi.array().required,
+    max_customers: Joi.any(),
+    min_age: Joi.any(),
+    max_weight: Joi.any(),
+    min_height: Joi.any(),
+    time_slots: Joi.array().required(),
   });
   return schema.validate(data);
 };

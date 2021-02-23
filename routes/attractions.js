@@ -58,6 +58,7 @@ router.post("/add", verifyToken, async (req, res) => {
 
   const {
     title,
+    description,
     price,
     opening_time,
     closing_time,
@@ -70,6 +71,7 @@ router.post("/add", verifyToken, async (req, res) => {
 
   const attraction = new Attraction({
     title: title,
+    description: description,
     price: price,
     opening_time: opening_time,
     closing_time: closing_time,

@@ -7,9 +7,17 @@ const attractionSchema = mongoose.Schema({
     min: 2,
     max: 255,
   },
+  description: {
+    type: String,
+    required: true,
+  },
   price: {
     type: Number,
     required: true,
+  },
+  status: {
+    type: String,
+    default: "open",
   },
   opening_time: {
     type: String,
@@ -26,21 +34,17 @@ const attractionSchema = mongoose.Schema({
   },
   max_customers: {
     type: Number,
-    required: true,
     min: 1,
   },
   min_age: {
     type: Number,
-    required: true,
     min: 1,
   },
   max_weight: {
     type: Number,
-    required: true,
   },
   min_height: {
     type: Number,
-    required: true,
   },
   ratings: {
     type: Array,
