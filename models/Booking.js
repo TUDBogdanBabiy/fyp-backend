@@ -5,7 +5,15 @@ const bookingSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  customer_name: {
+    type: String,
+    required: true,
+  },
   attraction_id: {
+    type: String,
+    required: true,
+  },
+  attraction_name: {
     type: String,
     required: true,
   },
@@ -13,9 +21,13 @@ const bookingSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  end_time: {
+    type: String,
+    required: true,
+  },
   date_booked: {
     type: Date,
-    default: Date.now,
+    default: Date,
   },
 });
 

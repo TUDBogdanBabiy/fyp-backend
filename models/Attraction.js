@@ -17,7 +17,7 @@ const attractionSchema = mongoose.Schema({
   },
   status: {
     type: String,
-    default: "open",
+    default: "closed",
   },
   opening_time: {
     type: String,

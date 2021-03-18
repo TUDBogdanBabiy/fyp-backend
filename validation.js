@@ -41,6 +41,7 @@ const bookingValidation = (data) => {
     customer_id: Joi.string().required(),
     attraction_id: Joi.string().required(),
     start_time: Joi.string().required(),
+    end_time: Joi.string().required(),
   });
   return schema.validate(data);
 };
