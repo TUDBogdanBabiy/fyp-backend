@@ -31,7 +31,7 @@ router.post("/register", async (req, res) => {
 
   try {
     const savedUser = await user.save();
-    const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
+    const token = jwt.sign({ id: user._id }, "secret", {
       expiresIn: "24h",
     });
     res.json({ username: user.firstname, user_type: user.type, token: token });
@@ -52,7 +52,7 @@ router.post("/login", async (req, res) => {
   const validPass = await bcrypt.compare(req.body.password, user.password);
   if (!validPass) return res.status(400).send("Incorrect email or password!");
 
-  const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
+  const token = jwt.sign({ id: user._id }, "secret", {
     expiresIn: "24h",
   });
   res.json({ username: user.firstname, user_type: user.type, token: token });
@@ -71,7 +71,7 @@ router.post("/login/google", async (req, res) => {
     const user = await User.findOne({ email: email });
 
     if (user) {
-      const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
+      const token = jwt.sign({ id: user._id }, "secret", {
         expiresIn: "24h",
       });
       return res.json({
@@ -89,7 +89,7 @@ router.post("/login/google", async (req, res) => {
 
       const savedUser = await user.save();
 
-      const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
+      const token = jwt.sign({ id: user._id },"secret", {
         expiresIn: "24h",
       });
       return res.json({
@@ -106,7 +106,7 @@ router.post("/login/google", async (req, res) => {
 router.get("/user", verifyToken, async (req, res) => {
   const user_id = req.user.id;
   const user = await User.findOne({ _id: user_id });
-  const newToken = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
+  const newToken = jwt.sign({ id: user._id }, "secret", {
     expiresIn: "24h",
   });
   res.json({

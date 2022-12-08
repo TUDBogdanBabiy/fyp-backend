@@ -25,7 +25,7 @@ app.use("/bookings", bookingsRoutes);
 
 // Connect to DB
 mongoose.connect(
-  process.env.DB_CONNECTION,
+  "mongodb+srv://admin:admin@parkmanagerdb.tjt6r.mongodb.net/?retryWrites=true&w=majority",
   { useUnifiedTopology: true, useNewUrlParser: true },
   () => {
     console.log("Connected to DB!");
@@ -33,6 +33,6 @@ mongoose.connect(
 );
 
 // Listen on port 3000
-app.listen(process.env.PORT, () => {
-  console.log(`Server is running on port ${process.env.PORT}`);
+app.listen(3000, () => {
+  console.log(`Server is running on port ${3000}`);
 });
